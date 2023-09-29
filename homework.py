@@ -26,6 +26,7 @@ class Training:
     LEN_STEP = 0.65
     M_IN_KM = 1000
     HOURS_TO_MINUTES = 60
+    CM_TO_M = 0.01  # Add this constant
 
     def __init__(self,
                  action: int,
@@ -65,7 +66,7 @@ class Running(Training):
 
     def get_spent_calories(self) -> float:
         """Переопределение метода для расчета калорий при беге."""
-        duration_minutes = self.duration * 60
+        duration_minutes = self.duration * Training.HOURS_TO_MINUTES
         calories = (
             (self.CALORIES_MEAN_SPEED_MULTIPLIER * self.get_mean_speed()
              + self.CALORIES_MEAN_SPEED_SHIFT)
@@ -91,7 +92,7 @@ class SportsWalking(Training):
         speed_mps = self.get_mean_speed() * SportsWalking.KM_PER
         calories = (
             (self.CALORIES_WEIGHT_COEFF * self.weight
-             + (speed_mps ** 2 / self.height)
+             + (speed_mps ** 2 / (self.height * Training.CM_TO_M))
              * self.CALORIES_SPEED_COEFF * self.weight)
             * duration_minutes
         )
@@ -112,7 +113,8 @@ class Swimming(Training):
     def get_mean_speed(self) -> float:
         """Переопределение метода для расчета средней скорости при плавании."""
         duration_minutes = self.duration * Training.HOURS_TO_MINUTES
-        return ((self.length_pool * self.count_pool / self.M_IN_KM)
+        return ((self.length_pool * self.count_pool
+                 * Training.CM_TO_M / self.M_IN_KM)
                 / duration_minutes)
 
 
