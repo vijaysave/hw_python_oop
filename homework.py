@@ -25,6 +25,7 @@ class Training:
     """Базовый класс тренировки."""
     LEN_STEP = 0.65
     M_IN_KM = 1000
+    HOURS_TO_MINUTES = 60
 
     def __init__(self,
                  action: int,
@@ -77,6 +78,7 @@ class SportsWalking(Training):
     """Тренировка: спортивная ходьба."""
     CALORIES_WEIGHT_COEFF = 0.035
     CALORIES_SPEED_COEFF = 0.029
+    KM_PER = 0.278  # Add this constant
 
     def __init__(self, action: int, duration: float, weight: float,
                  height: float):
@@ -85,8 +87,8 @@ class SportsWalking(Training):
 
     def get_spent_calories(self) -> float:
         """Переопределение метода для расчета калорий при спортивной ходьбе."""
-        duration_minutes = self.duration * 60
-        speed_mps = self.get_mean_speed() * 1000 / 3600
+        duration_minutes = self.duration * Training.HOURS_TO_MINUTES
+        speed_mps = self.get_mean_speed() * SportsWalking.KM_PER
         calories = (
             (self.CALORIES_WEIGHT_COEFF * self.weight
              + (speed_mps ** 2 / self.height)
@@ -99,7 +101,7 @@ class SportsWalking(Training):
 class Swimming(Training):
     """Тренировка: плавание."""
     LEN_STEP = 1.38
-    CALORIES_HEIGHT_COEFF = 0.05  # Adjust this value as needed
+    CALORIES_HEIGHT_COEFF = 1.1
 
     def __init__(self, action: int, duration: float, weight: float,
                  length_pool: float, count_pool: int):
@@ -109,16 +111,9 @@ class Swimming(Training):
 
     def get_mean_speed(self) -> float:
         """Переопределение метода для расчета средней скорости при плавании."""
-        duration_hours = self.duration
+        duration_minutes = self.duration * Training.HOURS_TO_MINUTES
         return ((self.length_pool * self.count_pool / self.M_IN_KM)
-                / duration_hours)
-
-    def get_spent_calories(self) -> float:
-        """Переопределение метода для расчета калорий при плавании."""
-        duration_hours = self.duration
-        mean_speed = self.get_mean_speed()
-        calories = (mean_speed + 1.1) * 2 * self.weight * duration_hours
-        return calories
+                / duration_minutes)
 
 
 def read_package(workout_type: str, data: list) -> Training:
