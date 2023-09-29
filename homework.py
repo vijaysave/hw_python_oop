@@ -66,8 +66,8 @@ class Running(Training):
         duration_minutes = self.duration * 60
         calories = (
             (self.CALORIES_MEAN_SPEED_MULTIPLIER * self.get_mean_speed()
-             + self.CALORIES_MEAN_SPEED_SHIFT) *
-            self.weight / self.M_IN_KM * duration_minutes
+             + self.CALORIES_MEAN_SPEED_SHIFT)
+            * self.weight / self.M_IN_KM * duration_minutes
         )
         return calories
 
@@ -137,7 +137,7 @@ def read_package(workout_type: str, data: list) -> Training:
         else:
             action, duration, weight = data
             return workout_class(action, duration, weight)
-    else:  
+    else:
         raise ValueError(f"Неизвестный тип тренировки: {workout_type}")
 
 
