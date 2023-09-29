@@ -23,7 +23,6 @@ class InfoMessage:
 
 class Training:
     """Базовый класс тренировки."""
-
     LEN_STEP = 0.65
     M_IN_KM = 1000
 
@@ -35,9 +34,6 @@ class Training:
         self.action = action
         self.duration = duration
         self.weight = weight
-        self.distance = self.get_distance()
-        self.mean_speed = self.get_mean_speed()
-        self.calories = self.get_spent_calories()
 
     def get_distance(self) -> float:
         """Получить дистанцию в км."""
@@ -53,7 +49,12 @@ class Training:
 
     def show_training_info(self) -> InfoMessage:
         """Вернуть информационное сообщение о выполненной тренировке."""
-        pass
+        training_type = type(self).__name__
+        duration = self.duration
+        distance = self.get_distance()
+        speed = self.get_mean_speed()
+        calories = self.get_spent_calories()
+        return InfoMessage(training_type, duration, distance, speed, calories)
 
 
 class Running(Training):
@@ -89,7 +90,7 @@ class SportsWalking(Training):
         calories = (
             (self.CALORIES_WEIGHT_COEFF * self.weight
              + (speed_mps ** 2 / self.height)
-             * self.CALORIES_HEIGHT_COEFF * self.weight)
+             * self.CALORIES_SPEED_COEFF * self.weight)
             * duration_minutes
         )
         return calories
@@ -98,6 +99,7 @@ class SportsWalking(Training):
 class Swimming(Training):
     """Тренировка: плавание."""
     LEN_STEP = 1.38
+    CALORIES_HEIGHT_COEFF = 0.05  # Adjust this value as needed
 
     def __init__(self, action: int, duration: float, weight: float,
                  length_pool: float, count_pool: int):
@@ -137,8 +139,6 @@ def read_package(workout_type: str, data: list) -> Training:
         else:
             action, duration, weight = data
             return workout_class(action, duration, weight)
-    else:
-        raise ValueError(f"Неизвестный тип тренировки: {workout_type}")
 
 
 def main(training: Training) -> None:
