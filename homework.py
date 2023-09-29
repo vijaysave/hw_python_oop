@@ -112,10 +112,8 @@ class Swimming(Training):
 
     def get_mean_speed(self) -> float:
         """Переопределение метода для расчета средней скорости при плавании."""
-        duration_minutes = self.duration * Training.HOURS_TO_MINUTES
-        return ((self.length_pool * self.count_pool
-                 * Training.CM_TO_M / self.M_IN_KM)
-                / duration_minutes)
+        return ((self.length_pool * self.count_pool)
+                / (Training.M_IN_KM * self.duration))
 
 
 def read_package(workout_type: str, data: list) -> Training:
