@@ -1,3 +1,5 @@
+
+
 class InfoMessage:
     """Информационное сообщение о тренировке."""
     def __init__(self, training_type, duration, distance, speed, calories):
@@ -9,13 +11,11 @@ class InfoMessage:
 
     def get_message(self):
         """Возвращает строку информационного сообщения."""
-        MESSAGE = ('''
-                Тип тренировки: {sport};
-                Длительность: {time:.3f} ч.;
-                Дистанция: {dist:.3f} км;
-                Ср. скорость: {spe:.3f} км/ч;
-                Потрачено ккал: {cal:.3f}.
-                ''')
+        MESSAGE = ('Тип тренировки: {sport}; '
+                   'Длительность: {time:.3f} ч.; '
+                   'Дистанция: {dist:.3f} км; '
+                   'Ср. скорость: {spe:.3f} км/ч; '
+                   'Потрачено ккал: {cal:.3f}.')
         return (MESSAGE.format(sport=self.training_type,
                                time=self.duration,
                                dist=self.distance,
@@ -167,6 +167,7 @@ def read_package(workout_type: str, data: list[int]) -> Training:
 
 def main(training: Training) -> None:
     """Главная функция."""
+
     info = training.show_training_info()
     print(info.get_message())
 
