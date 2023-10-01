@@ -37,9 +37,12 @@ class Training:
 
     def get_distance(self):
         """Получить дистанцию в км."""
-        LEN_STEP = 0.65
+        if isinstance(self, Swimming):
+            LEN_STEP = 1.38  # Для плавания
+        else:
+            LEN_STEP = 0.65  # Для других видов тренировок
         M_IN_KM = 1000
-        return (self.action * LEN_STEP) / M_IN_KM
+        return self.action * LEN_STEP / M_IN_KM
 
     def get_mean_speed(self):
         """Получить среднюю скорость движения."""
