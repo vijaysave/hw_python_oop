@@ -17,11 +17,13 @@ class InfoMessage:
 
     def get_message(self):
         """Возвращает строку информационного сообщения."""
-        return (self.MESSAGE_TRANING.format(sport=self.training_type,
-                time=self.duration,
-                dist=self.distance,
-                spe=self.speed,
-                cal=self.calories))
+        return self.MESSAGE_TRANING.format(
+            sport=self.training_type,
+            time=self.duration,
+            dist=self.distance,
+            spe=self.speed,
+            cal=self.calories
+        )
 
 
 class Training:
@@ -122,7 +124,7 @@ class Swimming(Training):
                 * self.weight * self.duration)
 
 
-WORKOUT_CLASSES: dict = {
+WORKOUT_CLASSES: dict[str, type[Training]] = {
     'SWM': Swimming,
     'RUN': Running,
     'WLK': SportsWalking,
